@@ -1,15 +1,20 @@
 FROM python:3.11-slim-bookworm
 
-# System deps
+# System deps (nodejs/npm installed separately as Node 20)
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     adb \
     openjdk-17-jre-headless \
-    nodejs \
-    npm \
     libnss3 \
     libgtk-3-0 \
+    ca-certificates \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node.js 20 (required by Appium 3)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # Android SDK
@@ -27,8 +32,8 @@ RUN yes | sdkmanager --licenses
 RUN sdkmanager "platform-tools" "platforms;android-30"
 
 # Appium
-RUN npm install -g appium
-RUN appium driver install uiautomator2
+RUN npm install -g appium \
+    && appium driver install uiautomator2
 
 # Python deps
 COPY requirements.txt /app/requirements.txt
