@@ -33,7 +33,8 @@ RUN sdkmanager "platform-tools" "platforms;android-30"
 
 # Appium
 RUN npm install -g appium \
-    && appium driver install uiautomator2
+    && appium driver install uiautomator2 \
+    && appium plugin install inspector
 
 # Python deps
 COPY requirements.txt /app/requirements.txt

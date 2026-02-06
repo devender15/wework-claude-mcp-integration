@@ -1,0 +1,2 @@
+# Exclude local mcp/ so it doesn't shadow the installed mcp package (PyPI) in the container
+mcp/
